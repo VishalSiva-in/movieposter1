@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sports League Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0e1626;
+    --navy-deep: #080d18;
+    --lime: #c8f31d;
+    --lime-dim: #a7cf17;
+    --paper: #f4f2ea;
+    --ink: #14192a;
+    --line: rgba(20,25,42,0.14);
+    --red: #e0432b;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 48px 20px;
+    background: var(--navy-deep);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(200,243,29,0.06), transparent 40%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 40px);
+    font-family: 'Oswald', sans-serif;
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+  }
+
+  .bib {
+    width: 100%;
+    max-width: 560px;
+    background: var(--paper);
+    border-radius: 4px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Bib holes */
+  .bib::before, .bib::after {
+    content: "";
+    position: absolute;
+    top: 22px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--navy-deep);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.5);
+  }
+  .bib::before { left: 22px; }
+  .bib::after { right: 22px; }
+
+  header {
+    background: var(--navy);
+    color: var(--paper);
+    padding: 34px 40px 26px;
+    text-align: center;
+    position: relative;
+  }
+
+  .event-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--lime);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 34px;
+    line-height: 1;
+    margin: 0 0 8px;
+    letter-spacing: 0.5px;
+  }
+
+  header p {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(244,242,234,0.65);
+    letter-spacing: 0.5px;
+  }
+
+  .bib-number {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: rgba(244,242,234,0.5);
+    text-align: right;
+  }
+  .bib-number strong {
+    display: block;
+    font-size: 26px;
+    color: var(--lime);
+    font-weight: 700;
+  }
+
+  .perforation {
+    height: 0;
+    border-top: 2px dashed rgba(244,242,234,0.25);
+    margin: 0 40px;
+    position: relative;
+    top: -1px;
+  }
+
+  form {
+    padding: 34px 40px 40px;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 2px solid var(--line);
+    border-radius: 2px;
+    background: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14.5px;
+    color: var(--ink);
+    transition: border-color 0.15s ease;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--navy);
+  }
+
+  input::placeholder { color: #a3a5ad; }
+
+  .sport-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .sport-option {
+    position: relative;
+  }
+
+  .sport-option input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    top: 0; left: 0;
+  }
+
+  .sport-option .card {
+    border: 2px solid var(--line);
+    border-radius: 2px;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    background: #fff;
+  }
+
+  .sport-option input:checked + .card {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: var(--lime);
+  }
+
+  .sport-option input:focus-visible + .card {
+    outline: 2px solid var(--red);
+    outline-offset: 2px;
+  }
+
+  .tier-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tier-option {
+    flex: 1;
+    position: relative;
+  }
+
+  .tier-option input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .tier-option .card {
+    border: 2px solid var(--line);
+    border-radius: 2px;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .tier-option .card .price {
+    display: block;
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .tier-option input:checked + .card {
+    border-color: var(--red);
+    background: rgba(224,67,43,0.06);
+  }
+
+  .waiver {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(20,25,42,0.04);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 14px 16px;
+    margin-top: 24px;
+  }
+
+  .waiver input {
+    margin-top: 3px;
+    width: 17px;
+    height: 17px;
+    accent-color: var(--navy);
+    flex-shrink: 0;
+  }
+
+  .waiver label {
+    text-transform: none;
+    font-size: 12.5px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    line-height: 1.5;
+    color: #3a3f52;
+  }
+
+  .waiver a { color: var(--navy); font-weight: 600; }
+
+  button {
+    width: 100%;
+    margin-top: 24px;
+    padding: 16px;
+    background: var(--lime);
+    color: var(--navy-deep);
+    border: none;
+    border-radius: 2px;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.15s ease;
+  }
+
+  button:hover { background: var(--lime-dim); }
+  button:active { transform: scale(0.98); }
+
+  .fineprint {
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    color: #9a9da8;
+    letter-spacing: 0.5px;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 480px) {
+    .row, .sport-grid { grid-template-columns: 1fr 1fr; }
+    header { padding: 30px 24px 24px; }
+    form { padding: 28px 24px 32px; }
+    h1 { font-size: 27px; }
+    .bib-number { position: static; margin-top: 14px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bib">
+  <header>
+    <div class="event-tag">Fall League &middot; Open Registration</div>
+    <h1>Get In The Game</h1>
+    <p>Sign up an athlete for the upcoming season</p>
+    <div class="bib-number">Assigned Bib<strong>#——</strong></div>
+  </header>
+  <div class="perforation"></div>
+
+  <form onsubmit="event.preventDefault(); alert('Registration submitted — this is a front-end demo only.');">
+
+    <p class="section-label">Athlete Details</p>
+    <div class="row">
+      <div class="field">
+        <label for="fname">First Name</label>
+        <input type="text" id="fname" placeholder="Jordan" required>
+      </div>
+      <div class="field">
+        <label for="lname">Last Name</label>
+        <input type="text" id="lname" placeholder="Rivera" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" required>
+      </div>
+      <div class="field">
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="">Select</option>
+          <option>Female</option>
+          <option>Male</option>
+          <option>Non-binary</option>
+          <option>Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="jordan@email.com" required>
+      </div>
+      <div class="field">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+      </div>
+    </div>
+
+    <p class="section-label">Choose Sport</p>
+    <div class="sport-grid">
+      <label class="sport-option">
+        <input type="radio" name="sport" value="soccer" checked>
+        <span class="card">⚽ Soccer</span>
+      </label>
+      <label class="sport-option">
+        <input type="radio" name="sport" value="basketball">
+        <span class="card">🏀 Basketball</span>
+      </label>
+      <label class="sport-option">
+        <input type="radio" name="sport" value="volleyball">
+        <span class="card">🏐 Volleyball</span>
+      </label>
+      <label class="sport-option">
+        <input type="radio" name="sport" value="track">
+        <span class="card">🏃 Track</span>
+      </label>
+      <label class="sport-option">
+        <input type="radio" name="sport" value="swimming">
+        <span class="card">🏊 Swimming</span>
+      </label>
+      <label class="sport-option">
+        <input type="radio" name="sport" value="tennis">
+        <span class="card">🎾 Tennis</span>
+      </label>
+    </div>
+
+    <p class="section-label">Skill Tier</p>
+    <div class="tier-group">
+      <label class="tier-option">
+        <input type="radio" name="tier" value="rec" checked>
+        <span class="card">Recreational<span class="price">$45</span></span>
+      </label>
+      <label class="tier-option">
+        <input type="radio" name="tier" value="competitive">
+        <span class="card">Competitive<span class="price">$75</span></span>
+      </label>
+      <label class="tier-option">
+        <input type="radio" name="tier" value="elite">
+        <span class="card">Elite<span class="price">$110</span></span>
+      </label>
+    </div>
+
+    <p class="section-label" style="margin-top:28px;">Emergency Contact</p>
+    <div class="row">
+      <div class="field">
+        <label for="ename">Contact Name</label>
+        <input type="text" id="ename" placeholder="Alex Rivera" required>
+      </div>
+      <div class="field">
+        <label for="ephone">Contact Phone</label>
+        <input type="tel" id="ephone" placeholder="(555) 987-6543" required>
+      </div>
+    </div>
+
+    <div class="waiver">
+      <input type="checkbox" id="waiver" required>
+      <label for="waiver">I confirm the information above is accurate and accept the <a href="#">league waiver &amp; code of conduct</a>, including assumption of risk for participation.</label>
+    </div>
+
+    <button type="submit">Submit Registration</button>
+    <p class="fineprint">Season starts Sept 8 &middot; Spots confirmed by email within 48 hours</p>
+  </form>
+</div>
+
+</body>
+</html>
